@@ -1,9 +1,9 @@
 How to use
 
-#update local mainnet.json
+# update local mainnet.json
 `node .\updateRaydiumPools.js`
 
-##update local jupiter coins
+## update local jupiter coins
 `node .\updateJupiterCoins.js`
 
 run local mainnet server after the mainnet.json is dowloaded using the updateRaydiumPools.js change to correct directory path
