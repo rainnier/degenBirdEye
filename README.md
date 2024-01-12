@@ -7,7 +7,7 @@ node .\updateRaydiumPools.js
 node .\updateJupiterCoins.js
 
 ## run local mainnet server after the mainnet.json is dowloaded using the updateRaydiumPools.js change to correct directory path
-npx json-server C:\dev\raydium\mainnet.json --w
+## npx json-server C:\dev\raydium\mainnet.json --w
 
 
 ##run local og collection list replacing id for token and setting port to 3022 since 3000 is already used by mainnet.json and change to correct directory path
