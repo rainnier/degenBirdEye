@@ -16,5 +16,5 @@ How to use
 ## Start watching birdeye, buying, and notifying on tg
 `node ./Main.js`
 
-## Start checking to resell opportunity
+## Start checking resell opportunity
 `node .\tokenResellerDegenCron.js`
