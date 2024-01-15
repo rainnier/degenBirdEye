@@ -1,4 +1,3 @@
-const { Wallet } = require('@project-serum/anchor')
 const {
   Liquidity,
   Percent,
@@ -6,8 +5,8 @@ const {
 } = require('@raydium-io/raydium-sdk')
 const { TOKEN_PROGRAM_ID } = require('@solana/spl-token')
 const { Transaction } = require('@solana/web3.js')
-const { computeMinimumAmountWithSlippage } = require('./amountChecker.js')
 const { PoolKey } = require('./PoolKeyNew.js')
+const { AmtChecker } = require('./AmtChecker.js')
 
 class Raydium {
   constructor({ connection, wallet }) {
@@ -60,7 +59,7 @@ class Raydium {
     // Fetch the pool information
     const slippage = new Percent(slippagePercent, 100)
     const { amountInRaw, amountOutRaw } =
-      await computeMinimumAmountWithSlippage(
+      await AmtChecker.computeMinimumAmountWithSlippage(
         this.connection,
         poolKeys,
         solToSwap,
