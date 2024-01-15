@@ -8,5 +8,11 @@ const getWallet = async (privateKey) => {
   )
   return wallet
 }
+const getWalletBase58 = async (privateKey) => {
+  const wallet = new Wallet(
+    Keypair.fromSecretKey(Buffer.from(privateKey) || '')
+  )
+  return wallet
+}
 
-module.exports = { getWallet }
+module.exports = { getWallet, getWalletBase58 }
