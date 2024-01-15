@@ -1,8 +1,8 @@
 const { Raydium } = require('./Raydium.js')
 const { Helper } = require('./Helper.js')
 const { Jupiter } = require('./Jupiter.js')
-const { getPoolKeys } = require('./poolkey.js')
 const { OgLister } = require('./OgLister.js')
+const { PoolKey } = require('./PoolKeyNew.js')
 
 class BuyerWallet {
   constructor({ serverUrl, wallet, connection, amtToBuy = 0.01 }) {
@@ -88,7 +88,7 @@ class BuyerWallet {
   async buyList(ogListToBuy, amountToBuy, symbol) {
     const buyTxns = []
     for (const data of ogListToBuy) {
-      const poolKeys = await getPoolKeys(data.token)
+      const poolKeys = await PoolKey.getPoolKeys(data.token)
       if (poolKeys) {
         buyTxns.push(
           this.buyIndividuallyInRaydium(data.token, amountToBuy, symbol)
