@@ -6,8 +6,6 @@ const {
 } = require('@raydium-io/raydium-sdk')
 const { TOKEN_PROGRAM_ID } = require('@solana/spl-token')
 const { Transaction } = require('@solana/web3.js')
-const base58 = require('bs58')
-const { getPoolKeys } = require('./poolkey.js')
 const { computeMinimumAmountWithSlippage } = require('./amountChecker.js')
 const { PoolKey } = require('./PoolKeyNew.js')
 
