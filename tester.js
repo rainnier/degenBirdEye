@@ -1,12 +1,13 @@
 const { config } = require('dotenv')
 const { Jupiter } = require('./Jupiter')
 const { PoolKey } = require('./PoolKeyNew')
-const { getWallet } = require('./utils')
+const { getWallet, getWalletBase58 } = require('./utils')
 const { connection } = require('./https')
+const base58 = require('bs58')
 
 async function test(coin) {
-  const poolKeys = await PoolKey.getPoolKeys(coin)
-  console.log(poolKeys)
+  // const poolKeys = await PoolKey.getPoolKeys(coin)
+  // console.log(poolKeys)
   // if (!poolKeys) {
   //   config()
   //   const jupiter = new Jupiter({
