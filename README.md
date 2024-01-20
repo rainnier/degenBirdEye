@@ -20,7 +20,7 @@ How to use
 
 `npx json-server C:\dev\raydium\ogCollectionDegen.json --id token --port 3022 --w`
 
-## Start watching birdeye, buying, and notifying on tg
+## Start watching birdeye, watching tg group, buying, and notifying on tg
 
 `node ./Main.js`
 
