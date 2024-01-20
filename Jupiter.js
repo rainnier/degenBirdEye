@@ -46,7 +46,15 @@ class Jupiter {
       connection: this.connection,
       wallet: this.wallet,
     })
-    await wsolCreator.getOrCreateWsolAccount(0.03) // Add 0.03 WSOL
+    console.log(`buying in Jupiter`)
+    const wsolResult = await wsolCreator.getOrCreateWsolAccount(0.03) // Add 0.03 WSOL
+
+    if (!wsolResult) {
+      return {
+        status: 'FAIL',
+        description: `Not enough sol for wsol`,
+      }
+    }
 
     const { swapTransaction } = await axios
       .post(

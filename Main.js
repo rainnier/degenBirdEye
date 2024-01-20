@@ -74,6 +74,6 @@ async function launchTgBuyDetector() {
   tgBuyDetector.launch()
 }
 
-launchTgBuyDetector()
+// launchTgBuyDetector()
 
 var job = new CronJob('0 */2 * * * *', updateCall, null, true, 'Asia/Manila')

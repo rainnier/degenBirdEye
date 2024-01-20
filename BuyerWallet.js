@@ -30,9 +30,9 @@ class BuyerWallet {
                 .data.length > 0
             ) {
               // Do not add if already found in ogNotInList
-              console.log(`Not adding ${dataObject.token}`)
+              console.log(`Not adding to ogNotInList ${dataObject.token}`)
             } else {
-              console.log(`Adding ${dataObject.token}`)
+              console.log(`Adding to ogList ${dataObject.token}`)
               // await this.ogLister.addOgToNotInList(dataObject) - no longer add to ogNotInList to avoid save conflict
               // also add to collection but no balikTaya key so it will not be picked up
               await this.ogLister.addOg(dataObject)
@@ -43,9 +43,9 @@ class BuyerWallet {
                 .data.length > 0
             ) {
               // Do not add if already failed first attempt and already added in ogNotInList
-              console.log(`Not adding ${dataObject.token}`)
+              console.log(`Not adding to ogNotInList ${dataObject.token}`)
             } else {
-              console.log(`Adding ${dataObject.token}`)
+              console.log(`Adding to ogNotInList ${dataObject.token}`)
               await this.ogLister.addOgToNotInList(dataObject)
             }
           }
