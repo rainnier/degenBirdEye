@@ -5,6 +5,7 @@ const { getWallet } = require('./utils')
 const { config } = require('dotenv')
 const { CronJob } = require('cron')
 const { connection } = require('./https')
+const { TgBuyDetector } = require('./TgBuyDetector')
 
 config()
 class Subject {
@@ -33,6 +34,7 @@ async function updateCall() {
     serverUrl: 'http://localhost:3022', // Use appropriate port
     wallet: degenWal,
     connection,
+    amtToBuy: 0.006,
   })
   // Example usage
   const subject = new Subject()
@@ -57,5 +59,21 @@ async function updateCall() {
     latestGems,
   })
 }
+
+async function launchTgBuyDetector() {
+  console.log(`Launching TgBuyDetector`)
+  const degenWal = await getWallet(process.env.DEGEN_PRIV_KEY)
+  const degenWallet = new BuyerWallet({
+    serverUrl: 'http://localhost:3022', // Use appropriate port
+    wallet: degenWal,
+    connection,
+    amtToBuy: 0.006,
+  })
+
+  const tgBuyDetector = new TgBuyDetector({ buyerWallet: degenWallet })
+  tgBuyDetector.launch()
+}
+
+launchTgBuyDetector()
 
 var job = new CronJob('0 */2 * * * *', updateCall, null, true, 'Asia/Manila')
