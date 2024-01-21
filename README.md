@@ -12,7 +12,7 @@ How to use
 
 `node .\updateJupiterCoins.js`
 
-## Run local mainnet server after the mainnet.json is dowloaded using the updateRaydiumPools.js change to correct directory path
+## Run local mainnet server after the mainnet.json is downloaded using the updateRaydiumPools.js change to correct directory path
 
 `npx json-server C:\dev\raydium\mainnet.json --w`
 
