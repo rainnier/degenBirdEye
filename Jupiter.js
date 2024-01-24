@@ -128,24 +128,35 @@ class Jupiter {
   }
 
   buyInJupiter = async ({ toMintAddress, amt }) => {
-    const quoteResponse = await Jupiter.getQuote({
-      fromMintDecimals: WSOL.decimals,
-      fromMintAddress: WSOL.mint,
-      toMintAddress,
-      amount: amt,
-      slippageBps: 1000,
-    })
     let result
-    if (quoteResponse.error) {
+
+    try {
+      const quoteResponse = await Jupiter.getQuote({
+        fromMintDecimals: WSOL.decimals,
+        fromMintAddress: WSOL.mint,
+        toMintAddress,
+        amount: amt,
+        slippageBps: 1000,
+      })
+
+      if (quoteResponse.error) {
+        result = {
+          status: 'FAIL',
+          txn: `error txn`,
+          error: quoteResponse.error,
+        }
+      } else {
+        result = await this.processTransaction({
+          quoteResponse,
+        })
+      }
+    } catch (error) {
       result = {
         status: 'FAIL',
-        txn: `https://solscan.io/tx/${txid}`,
-        error: quoteResponse.error,
+        txn: `error txn`,
+        error,
       }
-    } else {
-      result = await this.processTransaction({
-        quoteResponse,
-      })
+      return result
     }
 
     console.log('result', result)

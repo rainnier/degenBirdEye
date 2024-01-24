@@ -118,6 +118,7 @@ class BuyerWallet {
         latestGems,
       })
 
+      console.log('newList', newList)
       if (newList.length > 0) {
         const buyResults = await this.buyList(newList, this.amtToBuy, 'WSOL')
 

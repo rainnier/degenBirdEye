@@ -28,7 +28,7 @@ class WsolCreator {
     const lamports = await this.connection.getBalance(this.wallet.publicKey)
     const currentSol = lamports / LAMPORTS_PER_SOL
 
-    const wsolAccount = await this.connection.getAccountInfo(wsolAddress)
+    let wsolAccount = await this.connection.getAccountInfo(wsolAddress)
 
     if (!wsolAccount) {
       await this.createWsolAssociatedTokenAddress({ wsolAddress })
