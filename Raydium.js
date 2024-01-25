@@ -103,7 +103,7 @@ class Raydium {
         return { status: 'FAIL', txn: `https://solscan.io/tx/${txid}` }
       }
     } catch (error) {
-      console.log(error)
+      return { status: 'FAIL', txn: `FAIL_TXN_RAYDIUM` }
     }
   }
 }
