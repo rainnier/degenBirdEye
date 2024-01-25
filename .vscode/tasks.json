@@ -1,0 +1,74 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Update Raydium Pools",
+      "type": "shell",
+      "command": "node",
+      "args": ["updateRaydiumPools.js"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Update Jupiter Coins",
+      "type": "shell",
+      "command": "node",
+      "args": ["updateJupiterCoins.js"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run Mainnet Server",
+      "type": "shell",
+      "command": "npx",
+      "args": ["json-server", "C:\\dev\\raydium\\mainnet.json", "--w"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run OG Collection List",
+      "type": "shell",
+      "command": "npx",
+      "args": [
+        "json-server",
+        "C:\\dev\\raydium\\ogCollectionDegen.json",
+        "--id",
+        "token",
+        "--port",
+        "3022",
+        "--w"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Start Main.js",
+      "type": "shell",
+      "command": "node",
+      "args": ["Main.js"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run All Tasks",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "Update Raydium Pools",
+        "Update Jupiter Coins",
+        "Run Mainnet Server",
+        "Run OG Collection List",
+        "Start Main.js"
+      ]
+    }
+  ]
+}

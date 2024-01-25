@@ -27,3 +27,7 @@ How to use
 ## Start checking resell opportunity
 
 `node .\tokenResellerDegenCron.js`
+
+## You can also run in vscode from updating raydium poo to Main.js using Run Tasks
+
+`ctrl+shift+P -> Run Tasks -> Run All Tasks`
