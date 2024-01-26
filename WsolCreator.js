@@ -45,7 +45,7 @@ class WsolCreator {
       }
 
       if (amountIn > 0) {
-        await this.fundWsol(wsolAddress, amountIn)
+        await this.fundWsol({ wsolAddress, amountIn })
       } else {
         return null
       }
@@ -107,35 +107,40 @@ class WsolCreator {
   }
 
   async fundWsol({ wsolAddress, amountIn }) {
-    console.log('Creating wsol account')
-    const transaction = new Transaction({
-      feePayer: this.wallet.publicKey,
-    })
-    const instructions = []
+    console.log(`Funding wsol account: ${amountIn} or 1/3 of sol`)
 
-    // fund sol to the account
-    instructions.push(
-      SystemProgram.transfer({
-        fromPubkey: this.wallet.publicKey,
-        toPubkey: wsolAddress,
-        lamports: amountIn * LAMPORTS_PER_SOL,
+    try {
+      const transaction = new Transaction({
+        feePayer: this.wallet.publicKey,
       })
-    )
+      const instructions = []
 
-    instructions.push(
-      // This is not exposed by the types, but indeed it exists
-      createSyncNativeInstruction(wsolAddress)
-    )
+      // fund sol to the account
+      instructions.push(
+        SystemProgram.transfer({
+          fromPubkey: this.wallet.publicKey,
+          toPubkey: wsolAddress,
+          lamports: (amountIn * LAMPORTS_PER_SOL).toFixed(0),
+        })
+      )
 
-    transaction.add(...instructions)
-    transaction.recentBlockhash = (
-      await this.connection.getLatestBlockhash()
-    ).blockhash
-    transaction.partialSign(this.wallet.payer)
-    const result = await this.connection.sendTransaction(transaction, [
-      this.wallet.payer,
-    ])
-    console.log({ result })
+      instructions.push(
+        // This is not exposed by the types, but indeed it exists
+        createSyncNativeInstruction(wsolAddress)
+      )
+
+      transaction.add(...instructions)
+      transaction.recentBlockhash = (
+        await this.connection.getLatestBlockhash()
+      ).blockhash
+      transaction.partialSign(this.wallet.payer)
+      const result = await this.connection.sendTransaction(transaction, [
+        this.wallet.payer,
+      ])
+      console.log({ result })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

@@ -34,7 +34,7 @@ async function updateCall() {
     serverUrl: 'http://localhost:3022', // Use appropriate port
     wallet: degenWal,
     connection,
-    amtToBuy: 0.006,
+    amtToBuy: 0.0069,
   })
   // Example usage
   const subject = new Subject()
@@ -62,18 +62,18 @@ async function updateCall() {
 
 async function launchTgBuyDetector() {
   console.log(`Launching TgBuyDetector`)
-  const degenWal = await getWallet(process.env.DEGEN_PRIV_KEY)
+  const degenWal = await getWallet(process.env.DEGEN_TG_PRIV_KEY)
   const degenWallet = new BuyerWallet({
     serverUrl: 'http://localhost:3022', // Use appropriate port
     wallet: degenWal,
     connection,
-    amtToBuy: 0.006,
+    amtToBuy: 0.0069,
   })
 
   const tgBuyDetector = new TgBuyDetector({ buyerWallet: degenWallet })
   tgBuyDetector.launch()
 }
 
-// launchTgBuyDetector()
+launchTgBuyDetector()
 
 var job = new CronJob('0 */2 * * * *', updateCall, null, true, 'Asia/Manila')

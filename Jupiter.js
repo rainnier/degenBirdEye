@@ -47,7 +47,7 @@ class Jupiter {
       wallet: this.wallet,
     })
     console.log(`buying in Jupiter`)
-    const wsolResult = await wsolCreator.getOrCreateWsolAccount(0.03) // Add 0.03 WSOL
+    const wsolResult = await wsolCreator.getOrCreateWsolAccount(0.2) // Add 0.03 WSOL
 
     if (!wsolResult) {
       return {
@@ -145,12 +145,15 @@ class Jupiter {
           txn: `error txn`,
           error: quoteResponse.error,
         }
+        console.log(error)
       } else {
         result = await this.processTransaction({
           quoteResponse,
         })
+        console.log('result', result)
       }
     } catch (error) {
+      console.log(error)
       result = {
         status: 'FAIL',
         txn: `error txn`,

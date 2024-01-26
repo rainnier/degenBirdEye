@@ -1,6 +1,7 @@
 const { config } = require('dotenv')
 const { Telegraf } = require('telegraf')
 const { Telegram } = require('./Telegram')
+const { Dexscreener } = require('./DexScreener')
 
 config()
 const botToken = process.env.BOT_TOKEN // Replace with your actual bot token
@@ -14,7 +15,7 @@ class TgBuyDetector {
     this.buyerWallet = buyerWallet
   }
   launch = async () => {
-    bot.on('text', (ctx) => {
+    bot.on('text', async (ctx) => {
       console.log('enter1')
       // Check if the message is from the group
       console.log(`groupchat id: ${groupId}`)
@@ -37,15 +38,31 @@ class TgBuyDetector {
           const extractedValue = match ? match[1] : null
 
           const ca_length = 44
+          const dexScreenerStart = 'https://dexscreener.com/solana/'
           if (
             extractedValue == null ||
             extractedValue.trim() === '' ||
             extractedValue.length != ca_length
           ) {
-            tg.sendMessage({
-              // degenBuy:[0x63B8D12543bc5F654606C6Eb6fCbbf4efbFdDAe6]
-              message: `string length is: ${rightSide.length}\nBro fail yan malamang wallet address yan o sobrang link: ${rightSide}`,
-            })
+            if (
+              extractedValue != null &&
+              extractedValue.startsWith(dexScreenerStart)
+            ) {
+              // https://dexscreener.com/solana/
+              const dexscreener = new Dexscreener()
+              const ca = await dexscreener.getCaOfPair({
+                pair: extractedValue.substring(dexScreenerStart.length),
+              })
+              tg.sendMessage({
+                message: `Seems to be buying with Dexscreener: ${extractedValue}\nGood, nice bili na tayo using ca: ${ca}`,
+              })
+              this.buyerWallet.buyNewTrendingCoins([{ token: ca }])
+            } else {
+              tg.sendMessage({
+                // degenBuy:[0x63B8D12543bc5F654606C6Eb6fCbbf4efbFdDAe6]
+                message: `string length is: ${rightSide.length}\nBro fail yan malamang wallet address yan o sobrang link: ${rightSide}`,
+              })
+            }
           } else {
             // degenBuy:4cuT75m6yYxsxgwFCNttmmkqru3fdFKbcQYjthmec31T
             tg.sendMessage({
