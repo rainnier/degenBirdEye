@@ -136,7 +136,7 @@ class BuyerWallet {
           if (additionalData.status === 'SUCCESS') {
             this.notify(
               `Please check if really successful for ${x.symbol ?? x.token}:\n${
-                x.txn
+                additionalData.txn
               }`
             )
             return {
