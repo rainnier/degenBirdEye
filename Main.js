@@ -9,6 +9,7 @@ const { TgBuyDetector } = require('./TgBuyDetector')
 const { Telegram } = require('./Telegram')
 
 config()
+const tg = new Telegram()
 class Subject {
   constructor() {
     this.observers = []
@@ -36,6 +37,9 @@ async function updateCall() {
     wallet: degenWal,
     connection,
     amtToBuy: 0.0069,
+    notify: (message) => {
+      tg.sendMessage({ message })
+    },
   })
   // Example usage
   const subject = new Subject()
@@ -62,7 +66,6 @@ async function updateCall() {
 }
 
 async function launchTgBuyDetector() {
-  const tg = new Telegram()
   console.log(`Launching TgBuyDetector`)
   const degenWal = await getWallet(process.env.DEGEN_TG_PRIV_KEY)
   const degenWallet = new BuyerWallet({
@@ -73,6 +76,7 @@ async function launchTgBuyDetector() {
     notify: (message) => {
       tg.sendMessage({ message })
     },
+    buyerType: 'dexScreener',
   })
 
   const tgBuyDetector = new TgBuyDetector({ buyerWallet: degenWallet })

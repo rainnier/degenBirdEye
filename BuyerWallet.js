@@ -11,6 +11,7 @@ class BuyerWallet {
     connection,
     amtToBuy = 0.01,
     notify = (msg) => {},
+    buyerType = 'birdEye',
   }) {
     this.wallet = wallet
     this.connection = connection
@@ -19,6 +20,7 @@ class BuyerWallet {
     this.jupiter = new Jupiter({ connection, wallet })
     this.ogLister = new OgLister({ httpUrl: serverUrl })
     this.notify = notify
+    this.buyerType = buyerType
   }
 
   async update(data) {
@@ -156,7 +158,9 @@ class BuyerWallet {
         await this.addDocuments(updateList)
       } else {
         console.log('No new Og List')
-        this.notify(`Already have this token`)
+        if (this.buyerType === 'dexScreener') {
+          this.notify(`Already have this token`)
+        }
       }
     } catch (error) {
       console.error('Error getting document:', error)
