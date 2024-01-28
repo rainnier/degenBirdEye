@@ -10,9 +10,13 @@ class Dexscreener {
     })
   }
 
-  async getCaOfPair({ pair }) {
-    const { data } = await this.http.get(`/${pair}`)
-    return data.pair.baseToken.address
+  async getCaOfPair({ address }) {
+    const { data } = await this.http.get(`/${address}`)
+    if (data.pair) {
+      return data.pair.baseToken.address
+    } else {
+      return address
+    }
   }
 }
 

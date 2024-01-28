@@ -51,10 +51,10 @@ class TgBuyDetector {
               // https://dexscreener.com/solana/
               const dexscreener = new Dexscreener()
               const ca = await dexscreener.getCaOfPair({
-                pair: extractedValue.substring(dexScreenerStart.length),
+                address: extractedValue.substring(dexScreenerStart.length),
               })
               tg.sendMessage({
-                message: `Seems to be buying with Dexscreener: ${extractedValue}\nGood, nice bili na tayo using ca: ${ca}`,
+                message: `Seems to be buying with Dexscreener: ${extractedValue}\nGood, let's try bili using ca: ${ca}`,
               })
               this.buyerWallet.buyNewTrendingCoins([{ token: ca }])
             } else {
@@ -66,7 +66,7 @@ class TgBuyDetector {
           } else {
             // degenBuy:4cuT75m6yYxsxgwFCNttmmkqru3fdFKbcQYjthmec31T
             tg.sendMessage({
-              message: `string length is: ${extractedValue.length}\nGood, nice bili na tayo: ${extractedValue}`,
+              message: `string length is: ${extractedValue.length}\nGood, let's try bili: ${extractedValue}`,
             })
             this.buyerWallet.buyNewTrendingCoins([{ token: extractedValue }])
           }

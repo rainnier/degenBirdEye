@@ -6,6 +6,7 @@ const { config } = require('dotenv')
 const { CronJob } = require('cron')
 const { connection } = require('./https')
 const { TgBuyDetector } = require('./TgBuyDetector')
+const { Telegram } = require('./Telegram')
 
 config()
 class Subject {
@@ -61,6 +62,7 @@ async function updateCall() {
 }
 
 async function launchTgBuyDetector() {
+  const tg = new Telegram()
   console.log(`Launching TgBuyDetector`)
   const degenWal = await getWallet(process.env.DEGEN_TG_PRIV_KEY)
   const degenWallet = new BuyerWallet({
@@ -68,6 +70,9 @@ async function launchTgBuyDetector() {
     wallet: degenWal,
     connection,
     amtToBuy: 0.0069,
+    notify: (message) => {
+      tg.sendMessage({ message })
+    },
   })
 
   const tgBuyDetector = new TgBuyDetector({ buyerWallet: degenWallet })

@@ -5,13 +5,20 @@ const { OgLister } = require('./OgLister.js')
 const { PoolKey } = require('./PoolKeyNew.js')
 
 class BuyerWallet {
-  constructor({ serverUrl, wallet, connection, amtToBuy = 0.01 }) {
+  constructor({
+    serverUrl,
+    wallet,
+    connection,
+    amtToBuy = 0.01,
+    notify = (msg) => {},
+  }) {
     this.wallet = wallet
     this.connection = connection
     this.amtToBuy = amtToBuy
     this.raydium = new Raydium({ connection, wallet })
     this.jupiter = new Jupiter({ connection, wallet })
     this.ogLister = new OgLister({ httpUrl: serverUrl })
+    this.notify = notify
   }
 
   async update(data) {
@@ -125,6 +132,11 @@ class BuyerWallet {
         const updateList = await newList.map((x) => {
           const additionalData = buyResults[x.token]
           if (additionalData.status === 'SUCCESS') {
+            this.notify(
+              `Please check if really successful for ${x.symbol ?? x.token}:\n${
+                x.txn
+              }`
+            )
             return {
               ...x,
               ...additionalData,
@@ -144,6 +156,7 @@ class BuyerWallet {
         await this.addDocuments(updateList)
       } else {
         console.log('No new Og List')
+        this.notify(`Already have this token`)
       }
     } catch (error) {
       console.error('Error getting document:', error)
