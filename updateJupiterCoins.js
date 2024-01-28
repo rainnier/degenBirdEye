@@ -9,8 +9,8 @@ async function fetchData() {
     // Replace 'YOUR_SERVER_ENDPOINT' with the actual server endpoint
     const response = await axios.get(serverUrl)
 
-    // remove name property
     const objData = { allCoins: response.data }
+
     // Save the data to a file
     const filePath = 'C:\\dev\\jupiter\\all.json' // Replace with correct path of all.json
     // Used in Jupiter to determine coin and decimals
