@@ -3,6 +3,7 @@ const { Helper } = require('./Helper.js')
 const { Jupiter } = require('./Jupiter.js')
 const { OgLister } = require('./OgLister.js')
 const { PoolKey } = require('./PoolKeyNew.js')
+const { TxnChecker } = require('./TxnChecker.js')
 
 class BuyerWallet {
   constructor({
@@ -118,6 +119,10 @@ class BuyerWallet {
     return resultObject
   }
 
+  delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
   async buyNewTrendingCoins(latestGems) {
     console.log('start buyTrendingCoins')
     try {
@@ -131,14 +136,34 @@ class BuyerWallet {
       if (newList.length > 0) {
         const buyResults = await this.buyList(newList, this.amtToBuy, 'WSOL')
 
-        const updateList = await newList.map((x) => {
+        const txnChecker = new TxnChecker({ connection: this.connection })
+
+        const updateList = await newList.map(async (x) => {
           const additionalData = buyResults[x.token]
           if (additionalData.status === 'SUCCESS') {
-            this.notify(
-              `Please check if really successful for ${x.symbol ?? x.token}:\n${
-                additionalData.txn
-              }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
-            )
+            setTimeout(() => {
+              console.log('Waiting')
+            }, 5000)
+
+            const successful = await txnChecker.isSolscanTxnSuccessful({
+              url: additionalData.txn,
+            })
+
+            if (successful) {
+              this.notify(
+                `Seems really successful for ${x.symbol ?? x.token}:\n${
+                  additionalData.txn
+                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
+              )
+            } else {
+              this.notify(
+                `Looks like not really successful for ${
+                  x.symbol ?? x.token
+                }:\n${
+                  additionalData.txn
+                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
+              )
+            }
             return {
               ...x,
               ...additionalData,
@@ -149,13 +174,11 @@ class BuyerWallet {
           } else {
             if (this.buyerType === 'dexScreener') {
               this.notify(
-                `Failed for ${x.token}:\n${additionalData.txn}\n
-                Please verify and retrigger degenBuy appropriately`
+                `Failed for ${x.token}:\n${additionalData.txn}\nPlease verify and retrigger degenBuy appropriately`
               )
             } else {
               this.notify(
-                `Failed for ${x.token}:\n${additionalData.txn}\n
-                Please verify`
+                `Failed for ${x.token}:\n${additionalData.txn}\nPlease verify`
               )
             }
             return {
