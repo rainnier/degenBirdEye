@@ -41,21 +41,23 @@ class BuyerWallet {
 
             const txnChecker = new TxnChecker({ connection: this.connection })
             const successful = await txnChecker.isSolscanTxnSuccessful({
-              url: additionalData.txn,
+              url: dataObject.txn,
             })
 
             if (successful) {
               this.notify(
-                `Seems really successful for ${x.symbol ?? x.token}:\n${
-                  additionalData.txn
+                `Seems really successful for ${
+                  dataObject.symbol ?? dataObject.token
+                }:\n${
+                  dataObject.txn
                 }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
               )
             } else {
               this.notify(
                 `Looks like not really successful for ${
-                  x.symbol ?? x.token
+                  dataObject.symbol ?? dataObject.token
                 }:\n${
-                  additionalData.txn
+                  dataObject.txn
                 }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
               )
             }
