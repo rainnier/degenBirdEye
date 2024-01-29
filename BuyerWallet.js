@@ -34,6 +34,30 @@ class BuyerWallet {
         try {
           if (dataObject.status === 'SUCCESS') {
             await this.ogLister.addOg(dataObject)
+            setTimeout(() => {
+              console.log('Waiting')
+            }, 5000)
+
+            const txnChecker = new TxnChecker({ connection: this.connection })
+            const successful = await txnChecker.isSolscanTxnSuccessful({
+              url: additionalData.txn,
+            })
+
+            if (successful) {
+              this.notify(
+                `Seems really successful for ${x.symbol ?? x.token}:\n${
+                  additionalData.txn
+                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
+              )
+            } else {
+              this.notify(
+                `Looks like not really successful for ${
+                  x.symbol ?? x.token
+                }:\n${
+                  additionalData.txn
+                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
+              )
+            }
           } else if (dataObject.status === 'FAIL_NO_POOL_KEYS') {
             if (
               (await this.ogLister.getCoinNotInOgCollection(dataObject.token))
@@ -136,34 +160,9 @@ class BuyerWallet {
       if (newList.length > 0) {
         const buyResults = await this.buyList(newList, this.amtToBuy, 'WSOL')
 
-        const txnChecker = new TxnChecker({ connection: this.connection })
-
         const updateList = await newList.map(async (x) => {
           const additionalData = buyResults[x.token]
           if (additionalData.status === 'SUCCESS') {
-            setTimeout(() => {
-              console.log('Waiting')
-            }, 5000)
-
-            const successful = await txnChecker.isSolscanTxnSuccessful({
-              url: additionalData.txn,
-            })
-
-            if (successful) {
-              this.notify(
-                `Seems really successful for ${x.symbol ?? x.token}:\n${
-                  additionalData.txn
-                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
-              )
-            } else {
-              this.notify(
-                `Looks like not really successful for ${
-                  x.symbol ?? x.token
-                }:\n${
-                  additionalData.txn
-                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
-              )
-            }
             return {
               ...x,
               ...additionalData,
