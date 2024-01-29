@@ -34,9 +34,10 @@ class BuyerWallet {
         try {
           if (dataObject.status === 'SUCCESS') {
             await this.ogLister.addOg(dataObject)
+
             setTimeout(() => {
               console.log('Waiting')
-            }, 5000)
+            }, 2000)
 
             const txnChecker = new TxnChecker({ connection: this.connection })
             const successful = await txnChecker.isSolscanTxnSuccessful({
@@ -143,10 +144,6 @@ class BuyerWallet {
     return resultObject
   }
 
-  delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-  }
-
   async buyNewTrendingCoins(latestGems) {
     console.log('start buyTrendingCoins')
     try {
@@ -160,7 +157,7 @@ class BuyerWallet {
       if (newList.length > 0) {
         const buyResults = await this.buyList(newList, this.amtToBuy, 'WSOL')
 
-        const updateList = await newList.map(async (x) => {
+        const updateList = await newList.map((x) => {
           const additionalData = buyResults[x.token]
           if (additionalData.status === 'SUCCESS') {
             return {
