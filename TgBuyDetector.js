@@ -38,11 +38,13 @@ class TgBuyDetector {
           const extractedValue = match ? match[1] : null
 
           const ca_length = 44
+          const ca_length_2 = 43
           const dexScreenerStart = 'https://dexscreener.com/solana/'
           if (
             extractedValue == null ||
             extractedValue.trim() === '' ||
-            extractedValue.length != ca_length
+            extractedValue.length < ca_length_2 ||
+            extractedValue.startsWith(dexScreenerStart)
           ) {
             if (
               extractedValue != null &&

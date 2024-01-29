@@ -147,6 +147,17 @@ class BuyerWallet {
               balikTaya: false,
             }
           } else {
+            if (this.buyerType === 'dexScreener') {
+              this.notify(
+                `Failed for ${x.token}:\n${additionalData.txn}\n
+                Please verify and retrigger degenBuy appropriately`
+              )
+            } else {
+              this.notify(
+                `Failed for ${x.token}:\n${additionalData.txn}\n
+                Please verify`
+              )
+            }
             return {
               ...x,
               ...additionalData,
