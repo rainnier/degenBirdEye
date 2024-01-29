@@ -137,7 +137,7 @@ class BuyerWallet {
             this.notify(
               `Please check if really successful for ${x.symbol ?? x.token}:\n${
                 additionalData.txn
-              }`
+              }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
             )
             return {
               ...x,
@@ -176,6 +176,12 @@ class BuyerWallet {
     } catch (error) {
       console.error('Error getting document:', error)
     }
+  }
+
+  async clearOg({ token }) {
+    const { data } = await this.ogLister.deleteOg(token)
+
+    return data
   }
 }
 module.exports = { BuyerWallet }

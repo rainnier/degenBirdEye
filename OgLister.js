@@ -11,6 +11,8 @@ class OgLister {
 
   updateOg = async (id, data) => this.http.patch(`/ogCollection/${id}`, data)
 
+  deleteOg = async (id) => this.http.delete(`/ogCollection/${id}`)
+
   getAllOg = async () => this.http.get(`/ogCollection`)
 
   getAllNotInOg = async () => this.http.get(`/ogNotInList`)

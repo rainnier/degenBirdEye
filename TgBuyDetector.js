@@ -73,6 +73,34 @@ class TgBuyDetector {
             this.buyerWallet.buyNewTrendingCoins([{ token: extractedValue }])
           }
         }
+
+        // Use a regular expression to extract the desired value
+        const match = inputString.match(/clearDegen:\s*([^[\]]*)/)
+        // Check if there is a match and get the extracted value
+        const extractedValue = match ? match[1] : null
+
+        if (extractedValue != null && extractedValue.trim() !== '') {
+          // clearDegen:8sV46KEWWsQunkw6MDNeBHWwnk32DWv7583519GerRD9
+
+          tg.sendMessage({
+            message: `Clearing token: ${extractedValue}`,
+          })
+          try {
+            const result = await this.buyerWallet.clearOg({
+              token: extractedValue,
+            })
+            if (result) {
+              tg.sendMessage({
+                message: `Clear seems ok - you may now retrigger degenBuy`,
+              })
+            }
+          } catch (error) {
+            console.log('error', error)
+            tg.sendMessage({
+              message: `Cannot clear token: ${extractedValue} - might have clearance already\nYou may now try retriggering degenBuy`,
+            })
+          }
+        }
       }
     })
 
