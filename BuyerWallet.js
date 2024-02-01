@@ -11,6 +11,7 @@ class BuyerWallet {
     wallet,
     connection,
     amtToBuy = 0.01,
+    notify = (msg) => {},
     notifySuccessAppender = () => {},
     notifyFailAppender = () => {},
     notifyNoOgFound = () => {},
@@ -23,11 +24,11 @@ class BuyerWallet {
     this.jupiter = new Jupiter({ connection, wallet })
     this.ogLister = new OgLister({ httpUrl: serverUrl })
     this.notifySuccess = (msg) => {
-      tg.sendMessage({ message: msg })
+      notify(msg)
       notifySuccessAppender()
     }
     this.notifyFail = (msg) => {
-      tg.sendMessage({ message: msg })
+      notify(msg)
       notifyFailAppender()
     }
     this.notifyNoOgFound = notifyNoOgFound

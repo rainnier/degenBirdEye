@@ -37,6 +37,9 @@ async function updateCall() {
     wallet: degenWal,
     connection,
     amtToBuy: 0.0069,
+    notify: (msg) => {
+      tg.sendMessage({ message: msg })
+    },
     notifySuccessAppender: () => {
       tg.sendMessage({
         message: `This txn is from birdEye(positive), if txn is not successful MUST ONLY clear og using clearDegen:token\nbirdEye scan will pick this up again`,
@@ -80,6 +83,9 @@ async function launchTgBuyDetector() {
     wallet: degenWal,
     connection,
     amtToBuy: 0.0069,
+    notify: (msg) => {
+      tg.sendMessage({ message: msg })
+    },
     notifySuccessAppender: () => {
       tg.sendMessage({
         message: `This txn is from degen trigger(positive), if txn is not successfull MUST BOTH clear og first using clearDegen:token\nAND retrigger using degenBuy:token`,
