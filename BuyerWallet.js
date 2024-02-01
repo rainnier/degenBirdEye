@@ -62,7 +62,7 @@ class BuyerWallet {
               )
             } else {
               this.notifySuccess(
-                `Transaction is somewhat questionable ${
+                `Transaction is somewhat questionable for ${
                   dataObject.symbol ?? dataObject.token
                 }:\n${dataObject.txn}`
               )
