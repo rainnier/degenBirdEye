@@ -46,9 +46,9 @@ async function updateCall() {
       })
     },
     notifyFailAppender: () => {
-      // tg.sendMessage({
-      //   message: `This txn is from birdEye(negative), if txn is not successful nothing to do - birdEye scan will pick this up again`,
-      // })
+      tg.sendMessage({
+        message: `This txn is from birdEye(negative), if txn is not successful nothing to do - birdEye scan will pick this up again`,
+      })
     },
   })
   // Example usage
