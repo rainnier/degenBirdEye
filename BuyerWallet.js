@@ -11,7 +11,9 @@ class BuyerWallet {
     wallet,
     connection,
     amtToBuy = 0.01,
-    notify = (msg) => {},
+    notifySuccessAppender = () => {},
+    notifyFailAppender = () => {},
+    notifyNoOgFound = () => {},
     buyerType = 'birdEye',
   }) {
     this.wallet = wallet
@@ -20,7 +22,15 @@ class BuyerWallet {
     this.raydium = new Raydium({ connection, wallet })
     this.jupiter = new Jupiter({ connection, wallet })
     this.ogLister = new OgLister({ httpUrl: serverUrl })
-    this.notify = notify
+    this.notifySuccess = (msg) => {
+      tg.sendMessage({ message: msg })
+      notifySuccessAppender()
+    }
+    this.notifyFail = (msg) => {
+      tg.sendMessage({ message: msg })
+      notifyFailAppender()
+    }
+    this.notifyNoOgFound = notifyNoOgFound
     this.buyerType = buyerType
   }
 
@@ -45,20 +55,16 @@ class BuyerWallet {
             })
 
             if (successful) {
-              this.notify(
-                `Seems really successful for ${
+              this.notifySuccess(
+                `Transaction is highly successful for ${
                   dataObject.symbol ?? dataObject.token
-                }:\n${
-                  dataObject.txn
-                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
+                }:\n${dataObject.txn}`
               )
             } else {
-              this.notify(
-                `Looks like not really successful for ${
+              this.notifySuccess(
+                `Transaction is somewhat questionable ${
                   dataObject.symbol ?? dataObject.token
-                }:\n${
-                  dataObject.txn
-                }\nIf txn is unsuccessful - clear og first using clearDegen:token\nand retrigger using degenBuy:token`
+                }:\n${dataObject.txn}`
               )
             }
           } else if (dataObject.status === 'FAIL_NO_POOL_KEYS') {
@@ -170,15 +176,7 @@ class BuyerWallet {
               balikTaya: false,
             }
           } else {
-            if (this.buyerType === 'dexScreener') {
-              this.notify(
-                `Failed for ${x.token}:\n${additionalData.txn}\nPlease verify and retrigger degenBuy appropriately`
-              )
-            } else {
-              this.notify(
-                `Failed for ${x.token}:\n${additionalData.txn}\nPlease verify`
-              )
-            }
+            this.notifyFail(`Failed for ${x.token}:\n${additionalData.txn}`)
             return {
               ...x,
               ...additionalData,
@@ -190,9 +188,7 @@ class BuyerWallet {
         await this.addDocuments(updateList)
       } else {
         console.log('No new Og List')
-        if (this.buyerType === 'dexScreener') {
-          this.notify(`Already have this token`)
-        }
+        this.notifyNoOgFound(`Already have this token`)
       }
     } catch (error) {
       console.error('Error getting document:', error)
