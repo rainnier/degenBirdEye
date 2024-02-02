@@ -40,15 +40,15 @@ async function updateCall() {
     notify: (msg) => {
       tg.sendMessage({ message: msg })
     },
+    notifySuccess: (msg) => {
+      tg.sendMessage({ message: msg })
+    },
     notifySuccessAppender: () => {
-      tg.sendMessage({
-        message: `This txn is from birdEye(positive), if txn is not successful MUST ONLY clear og using clearDegen:token\nbirdEye scan will pick this up again`,
-      })
+      return `This txn is from birdEye(positive), if txn is not successful MUST ONLY clear og using clearDegen:token\nbirdEye scan will pick this up again`
     },
     notifyFailAppender: () => {
-      tg.sendMessage({
-        message: `This txn is from birdEye(negative), if txn is not successful nothing to do - birdEye scan will pick this up again`,
-      })
+      // return `This txn is from birdEye(negative), if txn is not successful nothing to do - birdEye scan will pick this up again`
+      return ``
     },
   })
   // Example usage
@@ -83,18 +83,17 @@ async function launchTgBuyDetector() {
     wallet: degenWal,
     connection,
     amtToBuy: 0.0069,
-    notify: (msg) => {
+    notifySuccess: (msg) => {
+      tg.sendMessage({ message: msg })
+    },
+    notifyFail: (msg) => {
       tg.sendMessage({ message: msg })
     },
     notifySuccessAppender: () => {
-      tg.sendMessage({
-        message: `This txn is from degen trigger(positive), if txn is not successfull MUST BOTH clear og first using clearDegen:token\nAND retrigger using degenBuy:token`,
-      })
+      return `This txn is from degen trigger(positive), if txn is not successfull MUST BOTH clear og first using clearDegen:token\nAND retrigger using degenBuy:token`
     },
     notifyFailAppender: () => {
-      tg.sendMessage({
-        message: `This txn is from degen trigger(negative), if txn is not successfull JUST retrigger using degenBuy:token`,
-      })
+      return `This txn is from degen trigger(negative), if txn is not successfull JUST retrigger using degenBuy:token`
     },
     notifyNoOgFound: (msg) => {
       tg.sendMessage({

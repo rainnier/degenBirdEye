@@ -11,10 +11,15 @@ class BuyerWallet {
     wallet,
     connection,
     amtToBuy = 0.01,
-    notify = (msg) => {},
-    notifySuccessAppender = () => {},
-    notifyFailAppender = () => {},
+    notifySuccessAppender = () => {
+      return ''
+    },
+    notifyFailAppender = () => {
+      return ''
+    },
     notifyNoOgFound = () => {},
+    notifySuccess = (msg) => {},
+    notifyFail = (msg) => {},
     buyerType = 'birdEye',
   }) {
     this.wallet = wallet
@@ -24,12 +29,12 @@ class BuyerWallet {
     this.jupiter = new Jupiter({ connection, wallet })
     this.ogLister = new OgLister({ httpUrl: serverUrl })
     this.notifySuccess = (msg) => {
-      notify(msg)
-      notifySuccessAppender()
+      notifySuccess(`${msg}\n
+      ${notifySuccessAppender()}`)
     }
     this.notifyFail = (msg) => {
-      notify(msg)
-      notifyFailAppender()
+      notifyFail(`${msg}\n
+      ${notifyFailAppender()}`)
     }
     this.notifyNoOgFound = notifyNoOgFound
     this.buyerType = buyerType
