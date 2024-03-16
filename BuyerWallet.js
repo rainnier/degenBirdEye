@@ -171,6 +171,7 @@ class BuyerWallet {
       if (newList.length > 0) {
         const buyResults = await this.buyList(newList, this.amtToBuy, 'WSOL')
 
+        console.log('buyResults:', buyResults)
         const updateList = await newList.map((x) => {
           const additionalData = buyResults[x.token]
           if (additionalData.status === 'SUCCESS') {
@@ -182,7 +183,14 @@ class BuyerWallet {
               balikTaya: false,
             }
           } else {
-            this.notifyFail(`Failed for ${x.token}:\n${additionalData.txn}`)
+            let solChecker = ''
+            if (additionalData.txn === 'FAIL_TXN_RAYDIUM') {
+              solChecker = 'Please check if you have sufficient lamports\n'
+            }
+
+            this.notifyFail(
+              `${solChecker}Failed for ${x.token}:\n${additionalData.txn}`
+            )
             return {
               ...x,
               ...additionalData,

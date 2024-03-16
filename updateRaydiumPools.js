@@ -22,4 +22,4 @@ async function fetchData() {
 }
 
 // Call the function to fetch and save data - every 2 minutes
-var job = new CronJob('0 */2 * * * *', fetchData, null, true, 'Asia/Manila')
+var job = new CronJob('0 */5 * * * *', fetchData, null, true, 'Asia/Manila')

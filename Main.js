@@ -30,13 +30,18 @@ class Subject {
   }
 }
 
-async function updateCall() {
+let degenWallet
+let subject
+let birdEye
+let notifier
+
+async function initDegenVariables() {
   const degenWal = await getWallet(process.env.DEGEN_PRIV_KEY)
-  const degenWallet = new BuyerWallet({
+  degenWallet = new BuyerWallet({
     serverUrl: 'http://localhost:3022', // Use appropriate port
     wallet: degenWal,
     connection,
-    amtToBuy: 0.0069,
+    amtToBuy: 0.02,
     notify: (msg) => {
       tg.sendMessage({ message: msg })
     },
@@ -52,19 +57,22 @@ async function updateCall() {
     },
   })
   // Example usage
-  const subject = new Subject()
-
+  subject = new Subject()
   // Add the observer module to the subject
   subject.addObserver(degenWallet)
 
-  const birdEye = new BirdEye()
+  birdEye = new BirdEye()
+  notifier = new Notifier()
+}
+
+async function updateCall() {
   const latestGems = await birdEye.fetchLatestGems30()
 
   //BuyerWallet notifier
   subject.notifyObservers(latestGems)
 
   // Tg notifier
-  const notifier = new Notifier()
+
   const previousGems = [
     ...(await degenWallet.ogLister.getAllOg()).data,
     ...(await degenWallet.ogLister.getAllNotInOg()).data,
@@ -77,12 +85,12 @@ async function updateCall() {
 
 async function launchTgBuyDetector() {
   console.log(`Launching TgBuyDetector`)
-  const degenWal = await getWallet(process.env.DEGEN_TG_PRIV_KEY)
-  const degenWallet = new BuyerWallet({
+  const degenWalTg = await getWallet(process.env.DEGEN_TG_PRIV_KEY)
+  const degenWalletTg = new BuyerWallet({
     serverUrl: 'http://localhost:3022', // Use appropriate port
-    wallet: degenWal,
+    wallet: degenWalTg,
     connection,
-    amtToBuy: 0.0069,
+    amtToBuy: 0.02,
     notifySuccess: (msg) => {
       tg.sendMessage({ message: msg })
     },
@@ -103,10 +111,11 @@ async function launchTgBuyDetector() {
     buyerType: 'dexScreener',
   })
 
-  const tgBuyDetector = new TgBuyDetector({ buyerWallet: degenWallet })
+  const tgBuyDetector = new TgBuyDetector({ buyerWallet: degenWalletTg })
   tgBuyDetector.launch()
 }
 
+initDegenVariables()
 launchTgBuyDetector()
 
-var job = new CronJob('0 */2 * * * *', updateCall, null, true, 'Asia/Manila')
+//var job = new CronJob('0 */2 * * * *', updateCall, null, true, 'Asia/Manila')

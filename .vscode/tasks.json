@@ -5,7 +5,9 @@
       "label": "Update Raydium Pools",
       "type": "shell",
       "command": "node",
-      "args": ["updateRaydiumPools.js"],
+      "args": [
+        "updateRaydiumPools.js"
+      ],
       "presentation": {
         "reveal": "always",
         "panel": "dedicated"
@@ -15,7 +17,9 @@
       "label": "Update Jupiter Coins",
       "type": "shell",
       "command": "node",
-      "args": ["updateJupiterCoins.js"],
+      "args": [
+        "updateJupiterCoins.js"
+      ],
       "presentation": {
         "reveal": "always",
         "panel": "dedicated"
@@ -25,7 +29,11 @@
       "label": "Run Mainnet Server",
       "type": "shell",
       "command": "npx",
-      "args": ["json-server", "C:\\dev\\raydium\\mainnet.json", "--w"],
+      "args": [
+        "json-server",
+        "C:\\dev\\raydium\\mainnet.json",
+        "--w"
+      ],
       "presentation": {
         "reveal": "always",
         "panel": "dedicated"
@@ -53,7 +61,9 @@
       "label": "Start Main.js",
       "type": "shell",
       "command": "node",
-      "args": ["Main.js"],
+      "args": [
+        "Main.js"
+      ],
       "presentation": {
         "reveal": "always",
         "panel": "dedicated"
@@ -68,7 +78,8 @@
         "Run Mainnet Server",
         "Run OG Collection List",
         "Start Main.js"
-      ]
+      ],
+      "problemMatcher": []
     }
   ]
 }
